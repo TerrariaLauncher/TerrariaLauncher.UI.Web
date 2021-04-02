@@ -1,0 +1,6 @@
+{
+    "env": "production",
+    "useHttps": false,
+    "apiHost": "terrariavn.ddns.net",
+    "apiPort": "80"
+}

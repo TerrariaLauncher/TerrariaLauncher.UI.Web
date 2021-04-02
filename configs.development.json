@@ -1,0 +1,6 @@
+{
+    "env": "development",
+    "useHttps": false,
+    "apiHost": "localhost",
+    "apiPort": "3000"
+}

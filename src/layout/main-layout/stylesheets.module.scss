@@ -1,0 +1,21 @@
+$topbar-height: 4.45rem;
+
+.main-layout {
+    height: 100%;
+}
+
+.top-bar-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.content-wrapper {
+    height: 100%;
+    padding-top: $topbar-height;
+}
+
+.footer-wrapper {
+    
+}
