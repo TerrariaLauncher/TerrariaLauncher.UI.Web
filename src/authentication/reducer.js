@@ -1,9 +1,9 @@
 import * as loginActions from './login/actions.js';
 
 const defaultState = {
-    userId: -1,
-    userName: '',
-    userGroup: '',
+    id: -1,
+    name: '',
+    group: '',
 };
 
 export default function (state = defaultState, action) {
