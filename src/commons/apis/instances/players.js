@@ -3,12 +3,12 @@ import createEventSource from '../commons/create-event-source.js';
 /**
  * 
  * @param {object} payload
- * @param {number} payload.serverId
+ * @param {number} payload.instanceId
  */
 export async function createTrackPlayerSessionEventSource(payload) {
-    const { serverId } = payload;
+    const { instanceId } = payload;
     return await createEventSource({
-        resource: `/api/servers/${serverId}/players`,
+        resource: `/api/instances/${instanceId}/players`,
         params: {
             level: 'real-time'
         }
@@ -18,13 +18,13 @@ export async function createTrackPlayerSessionEventSource(payload) {
 /**
  * 
  * @param {object} payload
- * @param {number} payload.serverId
+ * @param {number} payload.instanceId
  * @param {string} payload.playerName
  */
 export async function createTrackPlayerDataEventSource(payload) {
-    const {serverId, playerName} = payload;
+    const { instanceId, playerName } = payload;
     return await createEventSource({
-        resource: `/api/servers/${serverId}/players/${playerName}`,
+        resource: `/api/instances/${instanceId}/players/${playerName}`,
         params: {
             level: 'real-time'
         }

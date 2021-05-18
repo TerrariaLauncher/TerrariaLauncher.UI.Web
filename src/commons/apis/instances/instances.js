@@ -1,8 +1,8 @@
 import request from '../commons/request.js';
 
-export function getTerrariaServers() {
+export function getInstances() {
     return request({
         method: 'GET',
-        resource: '/api/servers'
+        resource: '/api/instances'
     });
 }

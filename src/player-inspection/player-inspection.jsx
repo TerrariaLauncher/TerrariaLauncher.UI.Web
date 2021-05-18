@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Divider, Dropdown, Image, Label, Popup } from 'semantic-ui-react';
-import * as serverThunks from '../servers/thunks.js';
+import * as instanceThunks from '../instances/thunks.js';
 import * as playerThunks from '../players/thunks.js';
 import * as thunks from './thunks.js';
 import * as constants from './constants.js';
@@ -222,20 +222,20 @@ function VoidVault(props) {
 export function PlayerInspection(props) {
     const dispatch = useDispatch();
     useEffect(function () {
-        dispatch(serverThunks.getTerrariaServersThunk());
+        dispatch(instanceThunks.getInstancesThunk());
         return function () {
             dispatch(playerThunks.stopTrackingPlayerSessionThunk());
             dispatch(thunks.stopTrackingPlayerDataThunk());
         };
     }, []);
 
-    const { serverId: selectedServerId, playerName: selectedPlayerName } = useSelector(state => state.playerInspection);
+    const { instanceId: selectedInstanceId, playerName: selectedPlayerName } = useSelector(state => state.playerInspection);
 
-    const { allIds: serverIds, byId: servers } = useSelector(state => state.servers);
+    const { allIds: instanceIds, byId: instances } = useSelector(state => state.instances);
     const serverOptions = useMemo(() => {
         const serverOptions = [];
-        serverIds.forEach((id) => {
-            const server = servers[id];
+        instanceIds.forEach((id) => {
+            const server = instances[id];
             serverOptions.push({
                 key: server.id,
                 text: server.name,
@@ -243,17 +243,17 @@ export function PlayerInspection(props) {
             });
         });
         return serverOptions;
-    }, [serverIds]);
+    }, [instanceIds]);
 
     /**
      * 
      * @param {React.SyntheticEvent<HTMLElement, Event>} event 
      * @param {import('semantic-ui-react').DropdownProps} args 
      */
-    const handleServerDropdownChange = function (event, args) {
+    const handleInstanceDropdownChange = function (event, args) {
         dispatch(playerThunks.stopTrackingPlayerSessionThunk());
         dispatch(playerThunks.trackPlayerSessionRequestThunk({
-            serverId: args.value
+            instanceId: args.value
         }));
     };
 
@@ -274,7 +274,7 @@ export function PlayerInspection(props) {
     const handlePlayerDropdownChange = function (event, args) {
         dispatch(thunks.stopTrackingPlayerDataThunk());
         dispatch(thunks.trackPlayerDataRequestThunk({
-            serverId: selectedServerId,
+            serverId: selectedInstanceId,
             playerName: args.value
         }));
     };
@@ -282,11 +282,11 @@ export function PlayerInspection(props) {
     return (
         <div className={stylesheets.playerInspection}>
             <Dropdown
-                placeholder='Select a Server'
+                placeholder='Select a Instance'
                 search selection
                 options={serverOptions}
-                value={selectedServerId}
-                onChange={handleServerDropdownChange} />
+                value={selectedInstanceId}
+                onChange={handleInstanceDropdownChange} />
             <Dropdown
                 placeholder='Select a Player'
                 search selection

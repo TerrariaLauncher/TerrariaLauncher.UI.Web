@@ -1,4 +1,4 @@
-import { createTrackPlayerDataEventSource } from '../commons/apis/servers/players.js';
+import { createTrackPlayerDataEventSource } from '../commons/apis/instances/players.js';
 import * as actions from './actions.js';
 
 /**

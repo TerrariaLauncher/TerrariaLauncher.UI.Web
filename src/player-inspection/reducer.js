@@ -17,7 +17,7 @@ function createDefaultInventorySegment(numSlots) {
 };
 
 const defaultState = {
-    serverId: -1,
+    instanceId: -1,
     playerName: '',
     inventory: {
         hotBar: createDefaultInventorySegment(constants.HotBarSlots),
@@ -52,10 +52,10 @@ const defaultState = {
     buff: []
 }
 
-function serverIdReducer(state = defaultState.serverId, action) {
+function instanceIdReducer(state = defaultState.instanceId, action) {
     switch (action.type) {
         case playerActions.TRACK_PLAYER_SESSION_REQUEST:
-            return action.payload.serverId;
+            return action.payload.instanceId;
         default:
             return state;
     }
@@ -138,7 +138,7 @@ function buffReducer(state = defaultState.buff, action) {
 }
 
 export default combineReducers({
-    serverId: serverIdReducer,
+    instanceId: instanceIdReducer,
     playerName: playerNameReducer,
     inventory: inventoryReducer,
     health: healthReducer,

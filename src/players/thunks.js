@@ -1,12 +1,12 @@
 import * as actions from './actions.js';
-import { createTrackPlayerSessionEventSource } from '../commons/apis/servers/players.js';
+import { createTrackPlayerSessionEventSource } from '../commons/apis/instances/players.js';
 
 let playerSessionTrackingEventSource = null;
 
 /**
  * 
  * @param {object} payload
- * @param {number} payload.serverId
+ * @param {number} payload.instanceId
  */
 export function trackPlayerSessionRequestThunk(payload) {
     return async function (dispatch, getState) {
@@ -15,12 +15,12 @@ export function trackPlayerSessionRequestThunk(payload) {
         }
         
         dispatch(actions.createAction_trackPlayerSessionRequest({
-            serverId: payload.serverId
+            instanceId: payload.instanceId
         }));
         try {
-            const { serverId } = payload;
+            const { instanceId } = payload;
             playerSessionTrackingEventSource = await createTrackPlayerSessionEventSource({
-                serverId
+                instanceId
             });
             playerSessionTrackingEventSource.onopen = function (args) {
                 dispatch(actions.createAction_trackPlayerSessionSuccess());
