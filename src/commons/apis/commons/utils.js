@@ -1,5 +1,9 @@
 import jwtdecode from 'jwt-decode';
 import { renewAccessToken } from '../authentication.js';
+import {
+    LOCAL_STORAGE_KEY_FOR_ACCESS_TOKEN_EXPIRY_TIME,
+    LOCAL_STORAGE_KEY_FOR_AUTHENTICATION
+} from './local-storage-keys.js';
 
 const convertToString = (value) => {
     if (value instanceof Date) {
@@ -38,9 +42,9 @@ export function buildUrl(useHttps, host, port, path, params) {
 };
 
 export async function checkAndRenewAccessToken() {
-    const expireAtValue = localStorage.getItem('accessTokenExpireAt');
+    const expireAtValue = localStorage.getItem(LOCAL_STORAGE_KEY_FOR_ACCESS_TOKEN_EXPIRY_TIME);
     if (!expireAtValue) {
-        localStorage.setItem('accessTokenExpireAt', Date.now());
+        localStorage.setItem(LOCAL_STORAGE_KEY_FOR_ACCESS_TOKEN_EXPIRY_TIME, Date.now());
     }
 
     const expireAt = new Date(Number.parseInt(expireAtValue));
@@ -48,20 +52,40 @@ export async function checkAndRenewAccessToken() {
     const differenceMinutes = differenceMiliseconds / 1000 / 60;
 
     if (differenceMinutes <= 0.1) {
-        const response = await renewAccessTokenToken({
-            userId,
-            userType,
-            refreshToken
-        });
+        const response = await renewAccessToken();
 
         if (!response.ok) {
             console.log('Please logout and login again.');
             return;
         }
 
-        const { accessToken } = response.body;
-
+        const { accessToken, id, name, group } = response.body;
+        storeAuthentication({
+            id,
+            name,
+            group
+        });
         const refreshTokenDecoded = jwtdecode(accessToken);
-        localStorage.setItem('accessTokenExpireAt', refreshTokenDecoded.exp * 1000); // exp: number of seconds.
+        localStorage.setItem(LOCAL_STORAGE_KEY_FOR_ACCESS_TOKEN_EXPIRY_TIME, refreshTokenDecoded.exp * 1000); // exp: number of seconds.
     }
+}
+
+/**
+ * 
+ * @param {object} payload
+ * @param {number} payload.id
+ * @param {string} payload.name
+ * @param {string} payload.group
+ */
+export function storeAuthentication(payload) {
+    const savedAuthentication = JSON.stringify({
+        authentication: {
+            user: {
+                id: payload.id,
+                name: payload.name,
+                group: payload.group
+            }
+        }
+    });
+    localStorage.setItem(LOCAL_STORAGE_KEY_FOR_AUTHENTICATION, savedAuthentication);
 }

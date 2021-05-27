@@ -11,7 +11,8 @@ export async function createTrackPlayerSessionEventSource(payload) {
         resource: `/api/instances/${instanceId}/players`,
         params: {
             level: 'real-time'
-        }
+        },
+        useAccessToken: true
     });
 };
 
@@ -27,6 +28,7 @@ export async function createTrackPlayerDataEventSource(payload) {
         resource: `/api/instances/${instanceId}/players/${playerName}`,
         params: {
             level: 'real-time'
-        }
+        },
+        useAccessToken: true
     });
 }

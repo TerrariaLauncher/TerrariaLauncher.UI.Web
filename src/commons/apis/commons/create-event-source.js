@@ -9,7 +9,7 @@ import { buildUrl, checkAndRenewAccessToken } from './utils.js';
  * 
  */
 async function createEventSource(options) {
-    const { resource, params, useAccessToken = false } = options;
+    const { resource, params, useAccessToken } = options;
     
     if (useAccessToken) {
         await checkAndRenewAccessToken();
